@@ -1,16 +1,7 @@
 <?php
 session_start();
-//require 'functions.php';
-function displayFlashMassage($name)
-{
-    if(isset($_SESSION[$name])) {
-        echo '<div class="alert alert-' . $name . ' text-dark" role="alert">
-                <strong>Уведомление! </strong>' . $_SESSION[$name] .
-            '</div>';
-        unset($_SESSION[$name]);
-    }
-}
-$name = displayFlashMassage($name);
+require 'functions.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
