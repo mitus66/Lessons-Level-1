@@ -15,7 +15,7 @@ $user = getUserByEmail($email);
 $login = password_verify($password, $user['password']);
 
 // 4. если проверка прошла авторизуем и отправляем на страницу users
-if($login) {
+if($login && !empty($user)) {
     redirectTo('users.php');
 // 5. если нет - выводим сообщение и отправляем на повторную авторизацию
 }else{
