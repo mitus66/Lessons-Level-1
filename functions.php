@@ -80,6 +80,17 @@ function editUser($id, $name, $position, $phone, $address)
     $sth->execute();
 }
 
+function displayFlashMassage($flashName)
+{
+    if(isset($_SESSION[$flashName])) {
+        echo $_SESSION[$flashName];
+        unset($_SESSION[$flashName]);
+    }
+//    <div class="alert alert-' . $flashName . ' text-dark" role="alert">
+//                <strong>Уведомление! </strong>' . $_SESSION[$flashName] .
+//            '</div>'
+}
+
 function getAvatar()
 {
     // Check if file is selected
@@ -110,17 +121,7 @@ function getAvatar()
         }
     }
     return $destination;
-}
 
-function displayFlashMassage($flashName)
-{
-    if(isset($_SESSION[$flashName])) {
-        echo $_SESSION[$flashName];
-        unset($_SESSION[$flashName]);
-    }
-//    <div class="alert alert-' . $flashName . ' text-dark" role="alert">
-//                <strong>Уведомление! </strong>' . $_SESSION[$flashName] .
-//            '</div>'
 }
 
 function getUserById($id)
