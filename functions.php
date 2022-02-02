@@ -95,6 +95,24 @@ function editUserSecurity($id, $email, $password)
     $sth->execute();
 }
 
+function editUserAvatar($id, $avatar)
+{
+    $dbh = connectDb();
+
+// готовим запрос в БД
+    $sql = 'UPDATE users 
+            SET avatar = :avatar
+            WHERE id = :id';
+
+//    подготавливем замену
+    $sth = $dbh->prepare($sql);
+    $sth->bindValue(":id", $id);
+    $sth->bindValue(":avatar", $avatar);
+
+// Выполняем запрос:
+    $sth->execute();
+}
+
 function editUserStatus($id, $status)
 {
     $dbh = connectDb();
