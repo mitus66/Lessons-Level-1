@@ -131,6 +131,22 @@ function editUserStatus($id, $status)
     $sth->execute();
 }
 
+function deleteUser($id)
+{
+    $dbh = connectDb();
+
+// готовим запрос в БД
+    $sql = 'DELETE users 
+            WHERE id = :id';
+
+//    подготавливем замену
+    $sth = $dbh->prepare($sql);
+    $sth->bindValue(":id", $id);
+
+// Выполняем запрос:
+    $sth->execute();
+}
+
 function displayFlashMassage($flashName)
 {
     if(isset($_SESSION[$flashName])) {
