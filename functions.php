@@ -95,6 +95,24 @@ function editUserSecurity($id, $email, $password)
     $sth->execute();
 }
 
+function editUserStatus($id, $status)
+{
+    $dbh = connectDb();
+
+// готовим запрос в БД
+    $sql = 'UPDATE users 
+            SET status = :status
+            WHERE id = :id';
+
+//    подготавливем замену
+    $sth = $dbh->prepare($sql);
+    $sth->bindValue(":id", $id);
+    $sth->bindValue(":status", $status);
+
+// Выполняем запрос:
+    $sth->execute();
+}
+
 function displayFlashMassage($flashName)
 {
     if(isset($_SESSION[$flashName])) {
