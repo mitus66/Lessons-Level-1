@@ -56,11 +56,7 @@ function addUserByAdmin($email, $password, $avatar, $status, $name, $position, $
 function editUser($id, $name, $position, $phone, $address)
 {
 
-    $dbh = new \PDO(
-        'mysql:host=localhost;dbname=test',
-        'root',
-        ''
-    );
+    $dbh = connectDb();
 
 // готовим запрос в БД
     $sql = 'UPDATE users 
@@ -75,6 +71,25 @@ function editUser($id, $name, $position, $phone, $address)
     $sth->bindValue(":position", $position);
     $sth->bindValue(":phone", $phone);
     $sth->bindValue(":address", $address);
+
+// Выполняем запрос:
+    $sth->execute();
+}
+
+function editUserSecurity($id, $email, $password)
+{
+    $dbh = connectDb();
+
+// готовим запрос в БД
+    $sql = 'UPDATE users 
+            SET email = :email, password = :password
+            WHERE id = :id';
+
+//    подготавливем замену
+    $sth = $dbh->prepare($sql);
+    $sth->bindValue(":id", $id);
+    $sth->bindValue(":email", $email);
+    $sth->bindValue(":password", password_hash($password, PASSWORD_DEFAULT));
 
 // Выполняем запрос:
     $sth->execute();
