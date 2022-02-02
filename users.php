@@ -7,10 +7,12 @@ if(!$_SESSION['login']){
     exit();
 }else {
     $email = $_SESSION['email']; // тот, кто залогинился
-    $users = geUsersList(); // список пользователей из БД
+    $users = getUsersList(); // список пользователей из БД
     $role = $_SESSION['user']['role'];
+//    $_SESSION['login'] = $login;
 
 }
+
 ?>
 
 
@@ -51,7 +53,7 @@ if(!$_SESSION['login']){
 
         <main id="js-page-content" role="main" class="page-content mt-3">
             <div class="alert alert-success">
-                Профиль успешно обновлен.
+                <?php displayFlashMassage('success');?>
             </div>
             <div class="subheader">
                 <h1 class="subheader-title">
@@ -61,12 +63,14 @@ if(!$_SESSION['login']){
 
 
             <?php
-//            foreach($users as $user):
                 if($role == 'admin')
                     echo '
                     <div class="row">
                         <div class="col-xl-12">
-                            <a class="btn btn-success" href="create_user.html">Добавить</a>
+                        <form action="create_user.php" method="post">
+                            <input type="hidden" >
+                            <a class="btn btn-success" href="create_user.php" type="submit">Добавить</a>
+                        </form>
     
                             <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
                                 <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти пользователя">
@@ -82,13 +86,7 @@ if(!$_SESSION['login']){
                         </div>
                     </div>
                     ';
-//            endforeach;
             ?>
-
-
-
-
-
 
             <?php foreach($users as $user): ?>
 
@@ -110,17 +108,21 @@ if(!$_SESSION['login']){
                                                 ';
                                         ?>
                                     </a>
+
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="edit.html">
+
+                                         <a class="dropdown-item" href="edit.php?id=<?php echo $user['id']; ?>">
                                             <i class="fa fa-edit"></i>
-                                        Редактировать</a>
-                                        <a class="dropdown-item" href="security.html">
+                                                Редактировать</a>
+
+
+                                        <a class="dropdown-item" href="security.php?id=<?php echo $user['id']; ?>">
                                             <i class="fa fa-lock"></i>
                                         Безопасность</a>
-                                        <a class="dropdown-item" href="status.html">
+                                        <a class="dropdown-item" href="status.php?id=<?php echo $user['id']; ?>">
                                             <i class="fa fa-sun"></i>
                                         Установить статус</a>
-                                        <a class="dropdown-item" href="media.html">
+                                        <a class="dropdown-item" href="media.php?id=<?php echo $user['id']; ?>">
                                             <i class="fa fa-camera"></i>
                                             Загрузить аватар
                                         </a>
@@ -129,6 +131,7 @@ if(!$_SESSION['login']){
                                             Удалить
                                         </a>
                                     </div>
+
                                     <span class="text-truncate text-truncate-xl"><?php echo ($user['position']); ?></span>
                                 </div>
                                 <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
