@@ -2,6 +2,9 @@
 session_start();
 require 'functions.php';
 
+// если нет авторизации или пользователь не админ, вернуться на страницу логинизации
+isUserNotAdmin();
+
 $id = $_GET['id'];
 
 if (isset($_GET['id'])) {

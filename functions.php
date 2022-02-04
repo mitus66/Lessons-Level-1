@@ -19,39 +19,11 @@ function addUser($email, $password)
     $sth = $dbh->prepare($sql);
     // Выполняем запрос:
     $sth->execute(['email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
-    //    $sth->bindParam(':emaile', $email);
-    //    $sth->bindParam(':password', $hashedPassword);
-    //    $sth->execute();
-    // готовим флеш-сообщение
-}
+//    $sth->bindParam(':email', $email);
+//    $sth->bindParam(':password', password_hash($password, PASSWORD_DEFAULT)]);
+    $sth->execute();
 
-//function addUserByAdmin($email, $password, $avatar, $status, $name, $position, $phone, $address, $vkontakte, $telegram, $instagram)
-//{
-//    $dbh = connectDb();
-//    // готовим запрос в БД
-//    $sql = 'INSERT INTO users
-//        (email, password, avatar, status, name, position, phone, address, vkontakte, telegram, instagram)
-//        VALUES
-//        (:email, :password, :avatar, :status, :name, :position, :phone, :address, :vkontakte, :telegram, :instagram)';
-//    $sth = $dbh->prepare($sql);
-//    // Выполняем запрос:
-//    $sth->execute([
-//        'email' => $email,
-//        'password' => password_hash($password, PASSWORD_DEFAULT),
-//        'avatar' => $avatar,
-//        'status' => $status,
-//        'name' => $name,
-//        'position' => $position,
-//        'phone' => $phone,
-//        'address' => $address,
-//        'vkontakte' => $vkontakte,
-//        'telegram' => $telegram,
-//        'instagram' => $instagram
-//    ]);
-//    //    $sth->bindParam(':emaile', $email);
-//    //    $sth->bindParam(':password', $hashedPassword);
-//    //    $sth->execute();
-//}
+}
 
 function addUserInfo($name, $position, $phone, $address)
 {
@@ -228,8 +200,8 @@ function editUserStatus($id, $status)
 
 //    подготавливем замену
     $sth = $dbh->prepare($sql);
-    $sth->bindValue(":id", $id);
-    $sth->bindValue(":status", $status);
+    $sth->bindValue(':id', $id);
+    $sth->bindValue(':status', $status);
 
 // Выполняем запрос:
     $sth->execute();
@@ -238,16 +210,9 @@ function editUserStatus($id, $status)
 function deleteUser($id)
 {
     $dbh = connectDb();
-
-// готовим запрос в БД
-    $sql = 'DELETE users 
-            WHERE id = :id';
-
-//    подготавливем замену
+    $sql = 'DELETE FROM users WHERE id = :id';
     $sth = $dbh->prepare($sql);
-    $sth->bindValue(":id", $id);
-
-// Выполняем запрос:
+    $sth->bindValue('id', $id);
     $sth->execute();
 }
 
@@ -308,6 +273,14 @@ function getUsersList()
     $users = $sth->fetchAll(PDO::FETCH_ASSOC);
 
     return $users;
+}
+
+function isUserNotAdmin()
+{
+    if (!$_SESSION['login'] && $_SESSION['user']['role'] !== 'admin') {
+        redirectTo('login.php');
+        exit();
+    }
 }
 
 function redirectTo($path)

@@ -2,6 +2,9 @@
 session_start();
 require 'functions.php';
 
+// если нет авторизации или пользователь не админ, вернуться на страницу логинизации
+isUserNotAdmin();
+
 if (!isset($_POST) && !isset($_SESSION['id'])) {
     redirectTo('security.php');
     exit();

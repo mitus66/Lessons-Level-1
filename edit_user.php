@@ -2,10 +2,9 @@
 session_start();
 require 'functions.php';
 
-if (!isset($_POST) && !isset($_SESSION['id'])) {
-    redirectTo('edit.php');
-    exit();
-}
+// если нет авторизации или пользователь не админ, вернуться на страницу логинизации
+isUserNotAdmin();
+
 $id = $_SESSION['id'];
 $name = $_POST['name'];
 $position = $_POST['position'];
