@@ -24,14 +24,18 @@ if (!empty(getUserByEmail($email))) {
 }
 
 // обработать загрузку аватара
-$avatar = getAvatar();
+$avatar = $_FILES['avatar'];
 
 // занести в базу
 if(empty($_POST['email'] && $_POST['password'])) {
     setFlashMassage('danger', 'Не заполнены поля Email и/или Password');
     redirectTo('create_users.php');
 } else {
-    addUserByAdmin($_POST['email'], $_POST['password'], $avatar, $_POST['status'], $_POST['name'], $_POST['position'], $_POST['phone'], $_POST['address'], $_POST['vkontakte'], $_POST['telegram'], $_POST['instagram']);
+    addUserInfo($_POST['name'], $_POST['position'], $_POST['phone'], $_POST['address']);
+    addUserSecurity($_POST['email'], $_POST['password']);
+    addUserAvatar($avatar);
+    addUserStatus($_POST['status']);
+    addUserMedia($_POST['vkontakte'], $_POST['telegram'], $_POST['instagram']);
     // подготовить сообщение
     setFlashMassage('success', 'Профиль успешно обновлен');
     // перенаправить
