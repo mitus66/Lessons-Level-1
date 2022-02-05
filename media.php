@@ -6,13 +6,13 @@ if(!$_SESSION['login']) {
     redirectTo('login.php');
     exit();
 }
-if (!isset($_GET['id'])) {
-    redirectTo('users.php');
-    exit();
-}
+//if (!isset($_GET['id'])) {
+//    redirectTo('users.php');
+//    exit();
+//}
 $id = $_GET['id'];
-$user = getUserById($id);
 $_SESSION['id'] = $id;
+
 
 ?>
 <!DOCTYPE html>

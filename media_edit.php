@@ -6,12 +6,15 @@ require 'functions.php';
 isUserNotAdmin();
 
 $id = $_SESSION['id'];
+//$user = getUserById($id);
 $avatar = $_FILES['avatar'];
 
 if (isset($_POST)) {
     // обработать загрузку аватара
-    $destination = getAvatar();
-    $avatar = $destination;
+//    $destination = getAvatar();
+//    $avatar = $destination;
+    $avatar = getUserAvatar();
+
     editUserAvatar($id, $avatar);
     setFlashMassage('success', 'Данные обновлены');
     redirectTo('users.php');

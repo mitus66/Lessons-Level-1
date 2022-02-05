@@ -81,6 +81,10 @@ function addUserAvatar($avatar)
 
 }
 
+/**
+ * @param $email
+ * @param $password
+ */
 function addUserSecurity($email, $password)
 {
     $dbh = connectDb();
@@ -227,6 +231,37 @@ function displayFlashMassage($flashName)
 //            '</div>'
 }
 
+function getUserAvatar()
+{
+    // Check if file is selected
+    if (isset($_FILES['avatar'])
+        && 0 == $_FILES['avatar']['error']) {
+        // Get the fileextension
+
+        // Get the extension
+        $ext = strtolower(pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION));
+
+        // check extension and upload
+        if( in_array( $ext, array('jpg', 'jpeg', 'png', 'gif', 'bmp'))) {
+            // Filetype if valid, process uploading
+
+            $maxFileSize = 5 * 1024 * 1024; //5MB
+            if($_FILES['avatar']['size'] > $maxFileSize){
+                $error = 'File size is greater than allowed size'; // TO DO
+            }
+
+            // Get filename without extesion
+            $filenameWithoutExt = basename($_FILES['avatar']['name'], '.'.$ext);
+            // Generate new filename
+            $newFilename = str_replace(' ', '_', $filenameWithoutExt) . '_' . time() . '.' . $ext;
+
+            // Upload the file with new name
+            move_uploaded_file($_FILES['avatar']['tmp_name'], __DIR__ . '/img/demo/avatars/' . $newFilename);
+            $avatar = '/img/demo/avatars/' . $newFilename;
+        }
+    }   return $avatar;
+}
+
 function getUserById($id)
 {
     $dbh = connectDb();
@@ -278,6 +313,14 @@ function getUsersList()
 function isUserNotAdmin()
 {
     if (!$_SESSION['login'] && $_SESSION['user']['role'] !== 'admin') {
+        redirectTo('login.php');
+        exit();
+    }
+}
+
+function isUserNotLogged()
+{
+    if (!$_SESSION['login']) {
         redirectTo('login.php');
         exit();
     }
