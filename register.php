@@ -14,9 +14,7 @@ if (!empty(getUserByEmail($email))) {
     exit();
 } else {
     // иначе,
-    addUser($email, $password);
+    addUserSecurity($email, $password);
     setFlashMassage('success', 'Вы зарегистрированы');
     redirectTo('page_login.php');
 }
-
-//$login = password_verify($password, $data['password']);
