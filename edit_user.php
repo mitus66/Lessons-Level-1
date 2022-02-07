@@ -11,6 +11,6 @@ $position = $_POST['position'];
 $phone = $_POST['phone'];
 $address = $_POST['address'];
 
-editUser($id, $name, $position, $phone, $address);
+editUserInfo($id, $name, $position, $phone, $address);
 setFlashMassage('success', 'Данные обновлены');
 redirectTo('users.php');
