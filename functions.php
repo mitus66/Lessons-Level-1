@@ -11,61 +11,76 @@ function connectDb()
     return $dbh;
 }
 
-function addUserInfo($name, $position, $phone, $address)
-{
-    $dbh = connectDb();
-    // готовим запрос в БД
-    $sql = 'INSERT INTO users 
-        (name, position, phone, address)
-        VALUES 
-        (:name, :position, :phone, :address)';
-    $sth = $dbh->prepare($sql);
-    $sth->bindParam(':name', $name);
-    $sth->bindParam(':position', $position);
-    $sth->bindParam(':phone', $phone);
-    $sth->bindParam(':address', $address);
-    // Выполняем запрос:
-    $sth->execute();
-}
+//function addUser($email, $password)
+//{
+//    $dbh = connectDb();
+//    // готовим запрос в БД
+//    $sql = 'INSERT INTO users (email, password) VALUES (:email, :password)';
+//    $sth = $dbh->prepare($sql);
+//    // Выполняем запрос:
+//    $sth->execute(['email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
+////    $sth->bindParam(':email', $email);
+////    $sth->bindParam(':password', password_hash($password, PASSWORD_DEFAULT)]);
+//    $sth->execute();
+//
+//}
 
-function addUserAvatar($avatar)
-{
-    // Check if file is selected
-    if (isset($_FILES['avatar'])
-        && 0 == $_FILES['avatar']['error']) {
-        // Get the fileextension
+//function addUserInfo($id, $name, $position, $phone, $address)
+//{
+//    $dbh = connectDb();
+//    // готовим запрос в БД
+//    $sql = 'INSERT INTO users
+//        (id, name, position, phone, address)
+//        VALUES
+//        (:id, :name, :position, :phone, :address)';
+//    $sth = $dbh->prepare($sql);
+//    $sth->bindParam(':id', $id);
+//    $sth->bindParam(':name', $name);
+//    $sth->bindParam(':position', $position);
+//    $sth->bindParam(':phone', $phone);
+//    $sth->bindParam(':address', $address);
+//    // Выполняем запрос:
+//    $sth->execute();
+//}
 
-        // Get the extension
-        $ext = strtolower(pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION));
-
-        // check extension and upload
-        if( in_array( $ext, array('jpg', 'jpeg', 'png', 'gif', 'bmp'))) {
-            // Filetype if valid, process uploading
-
-            $maxFileSize = 5 * 1024 * 1024; //5MB
-            if($_FILES['avatar']['size'] > $maxFileSize){
-                $error = 'File size is greater than allowed size'; // TO DO
-            }
-
-            // Get filename without extesion
-            $filenameWithoutExt = basename($_FILES['avatar']['name'], '.'.$ext);
-            // Generate new filename
-            $newFilename = str_replace(' ', '_', $filenameWithoutExt) . '_' . time() . '.' . $ext;
-
-            // Upload the file with new name
-            move_uploaded_file($_FILES['avatar']['tmp_name'], __DIR__ . '/img/demo/avatars/' . $newFilename);
-            $avatar = '/img/demo/avatars/' . $newFilename;
-
-            $dbh = connectDb();
-            // готовим запрос в БД
-            $sql = 'INSERT INTO users (avatar) VALUES (:avatar)';
-            $sth = $dbh->prepare($sql);
-            // Выполняем запрос:
-            $sth->execute(['avatar' => $avatar]);
-        }
-    }
-
-}
+//function addUserAvatar($id, $avatar)
+//{
+//    // Check if file is selected
+//    if (isset($_FILES['avatar'])
+//        && 0 == $_FILES['avatar']['error']) {
+//        // Get the fileextension
+//
+//        // Get the extension
+//        $ext = strtolower(pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION));
+//
+//        // check extension and upload
+//        if( in_array( $ext, array('jpg', 'jpeg', 'png', 'gif', 'bmp'))) {
+//            // Filetype if valid, process uploading
+//
+//            $maxFileSize = 5 * 1024 * 1024; //5MB
+//            if($_FILES['avatar']['size'] > $maxFileSize){
+//                $error = 'File size is greater than allowed size'; // TO DO
+//            }
+//
+//            // Get filename without extesion
+//            $filenameWithoutExt = basename($_FILES['avatar']['name'], '.'.$ext);
+//            // Generate new filename
+//            $newFilename = str_replace(' ', '_', $filenameWithoutExt) . '_' . time() . '.' . $ext;
+//
+//            // Upload the file with new name
+//            move_uploaded_file($_FILES['avatar']['tmp_name'], __DIR__ . '/img/demo/avatars/' . $newFilename);
+//            $avatar = '/img/demo/avatars/' . $newFilename;
+//
+//            $dbh = connectDb();
+//            // готовим запрос в БД
+//            $sql = 'INSERT INTO users (id, avatar) VALUES (:id, :avatar)';
+//            $sth = $dbh->prepare($sql);
+//            // Выполняем запрос:
+//            $sth->execute(['id' => $id, 'avatar' => $avatar]);
+//        }
+//    }
+//
+//}
 
 /**
  * @param $email
@@ -85,41 +100,45 @@ function addUserSecurity($email, $password)
         'email' => $email,
         'password' => password_hash($password, PASSWORD_DEFAULT)
     ]);
+    $user = getUserByEmail($email);
+    return $user;
 }
 
-function addUserStatus($status)
-{
-    $dbh = connectDb();
-    // готовим запрос в БД
-    $sql = 'INSERT INTO users 
-        (status)
-        VALUES 
-        (:status)';
-    $sth = $dbh->prepare($sql);
-    // Выполняем запрос:
-    $sth->execute([
-        'status' => $status
-    ]);
-}
+//function addUserStatus($id, $status)
+//{
+//    $dbh = connectDb();
+//    // готовим запрос в БД
+//    $sql = 'INSERT INTO users
+//        (id, status)
+//        VALUES
+//        (:id, :status)';
+//    $sth = $dbh->prepare($sql);
+//    // Выполняем запрос:
+//    $sth->execute([
+//        'id' => $id,
+//        'status' => $status
+//    ]);
+//}
+//
+//function addUserMedia($id, $vkontakte, $telegram, $instagram)
+//{
+//    $dbh = connectDb();
+//    // готовим запрос в БД
+//    $sql = 'INSERT INTO users
+//        (id, vkontakte, telegram, instagram)
+//        VALUES
+//        (:id, :vkontakte, :telegram, :instagram)';
+//    $sth = $dbh->prepare($sql);
+//    // Выполняем запрос:
+//    $sth->execute([
+//        'id' => $id,
+//        'vkontakte' => $vkontakte,
+//        'telegram' => $telegram,
+//        'instagram' => $instagram
+//    ]);
+//}
 
-function addUserMedia($vkontakte, $telegram, $instagram)
-{
-    $dbh = connectDb();
-    // готовим запрос в БД
-    $sql = 'INSERT INTO users 
-        (vkontakte, telegram, instagram)
-        VALUES 
-        (:vkontakte, :telegram, :instagram)';
-    $sth = $dbh->prepare($sql);
-    // Выполняем запрос:
-    $sth->execute([
-        'vkontakte' => $vkontakte,
-        'telegram' => $telegram,
-        'instagram' => $instagram
-    ]);
-}
-
-function editUser($id, $name, $position, $phone, $address)
+function editUserInfo($id, $name, $position, $phone, $address)
 {
 
     $dbh = connectDb();
@@ -161,6 +180,41 @@ function editUserSecurity($id, $email, $password)
     $sth->execute();
 }
 
+function uploadAvatar()
+{
+    // Check if file is selected
+    if (isset($_FILES['avatar'])
+        && 0 == $_FILES['avatar']['error']) {
+        // Get the fileextension
+
+        // Get the extension
+        $ext = strtolower(pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION));
+
+        // check extension and upload
+        if( in_array( $ext, array('jpg', 'jpeg', 'png', 'gif', 'bmp'))) {
+            // Filetype if valid, process uploading
+
+            $maxFileSize = 5 * 1024 * 1024; //5MB
+            if ($_FILES['avatar']['size'] > $maxFileSize) {
+                $error = 'File size is greater than allowed size'; // TO DO
+            }
+
+            // Get filename without extesion
+            $filenameWithoutExt = basename($_FILES['avatar']['name'], '.' . $ext);
+            // Generate new filename
+            $newFilename = str_replace(' ', '_', $filenameWithoutExt) . '_' . time() . '.' . $ext;
+
+            // Upload the file with new name
+            move_uploaded_file($_FILES['avatar']['tmp_name'], __DIR__ . '/img/demo/avatars/' . $newFilename);
+            $avatar = '/img/demo/avatars/' . $newFilename;
+            return $avatar;
+        }
+
+
+    }
+
+}
+
 function editUserAvatar($id, $avatar)
 {
     $dbh = connectDb();
@@ -172,8 +226,8 @@ function editUserAvatar($id, $avatar)
 
 //    подготавливем замену
     $sth = $dbh->prepare($sql);
-    $sth->bindValue(":id", $id);
-    $sth->bindValue(":avatar", $avatar);
+    $sth->bindValue(':id', $id);
+    $sth->bindValue(':avatar', $avatar);
 
 // Выполняем запрос:
     $sth->execute();
@@ -192,6 +246,26 @@ function editUserStatus($id, $status)
     $sth = $dbh->prepare($sql);
     $sth->bindValue(':id', $id);
     $sth->bindValue(':status', $status);
+
+// Выполняем запрос:
+    $sth->execute();
+}
+
+function editUserMedia($id, $vkontakte, $telegram, $instagram)
+{
+    $dbh = connectDb();
+
+// готовим запрос в БД
+    $sql = 'UPDATE users 
+            SET vkontakte = :vkontakte, telegram = :telegram, instagram = :instagram 
+            WHERE id = :id';
+
+//    подготавливем замену
+    $sth = $dbh->prepare($sql);
+    $sth->bindValue(':id', $id);
+    $sth->bindValue(':vkontakte', $vkontakte);
+    $sth->bindValue(':telegram', $telegram);
+    $sth->bindValue(':instagram', $instagram);
 
 // Выполняем запрос:
     $sth->execute();
