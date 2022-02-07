@@ -11,20 +11,6 @@ function connectDb()
     return $dbh;
 }
 
-function addUser($email, $password)
-{
-    $dbh = connectDb();
-    // готовим запрос в БД
-    $sql = 'INSERT INTO users (email, password) VALUES (:email, :password)';
-    $sth = $dbh->prepare($sql);
-    // Выполняем запрос:
-    $sth->execute(['email' => $email, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
-//    $sth->bindParam(':email', $email);
-//    $sth->bindParam(':password', password_hash($password, PASSWORD_DEFAULT)]);
-    $sth->execute();
-
-}
-
 function addUserInfo($name, $position, $phone, $address)
 {
     $dbh = connectDb();
